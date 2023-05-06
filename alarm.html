@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Alarm Clock</title>
+  </head>
+  <body>
+    <div class="container">
+        <h1>Alarm Clock</h1>
+        <p>Current time: <span id="currentTime"></span></p>
+        <label for="alarmTime">Set alarm time:</label>
+        <input type="time" id="alarmTime" />
+        <button class="button" onclick="setAlarm()">Set Alarm</button>
+        <button class="button" onclick="stopAlarm()">Stop Alarm</button>
+
+        <p id="status"></p>
+      </div>
+
+    <script>
+      let alarmTime;
+      let alarmTimeout;
+
+      function updateCurrentTime() {
+        const now = new Date();
+        document.getElementById("currentTime").innerText =
+          now.toLocaleTimeString();
+        setTimeout(updateCurrentTime, 1000);
+      }
+
+      function setAlarm() {
+        clearTimeout(alarmTimeout);
+
+        alarmTime = document.getElementById("alarmTime").valueAsNumber;
+
+        if (isNaN(alarmTime)) {
+          alert("Invalid time");
+          return;
+        }
+
+        const now = new Date();
+        const alarmDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          0,
+          0,
+          0
+        );
+        alarmDate.setMilliseconds(alarmTime);
+
+        const timeToAlarm = alarmDate.getTime() - now.getTime();
+
+        alarmTimeout = setTimeout(() => {
+          alert("Wake up!");
+        }, timeToAlarm);
+
+        document.getElementById("status").innerText =
+          "Alarm set to " + alarmDate.toLocaleTimeString();
+      }
+
+      function triggerAlarm() {
+        document.getElementById("status").innerText = "Alarm ringing";
+        alert("Wake up!");
+      }
+
+      updateCurrentTime();
+    </script>
+  </body>
+</html>
